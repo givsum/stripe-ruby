@@ -186,11 +186,12 @@ retries are safe.
 
 ### Configuring Timeouts
 
-Open and read timeouts are configurable:
+Open, read, and keep_alive_timeouts timeouts are configurable:
 
 ```ruby
 Stripe.open_timeout = 30 # in seconds
 Stripe.read_timeout = 80
+Stripe.keep_alive_timeout = 30
 ```
 
 Please take care to set conservative read timeouts. Some API requests can take

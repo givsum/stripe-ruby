@@ -69,6 +69,7 @@ module Stripe
 
   @open_timeout = 30
   @read_timeout = 80
+  @keep_alive_timeout = 30
 
   @enable_telemetry = true
 
@@ -82,6 +83,7 @@ module Stripe
     # if they change.
     attr_reader :api_base
     attr_reader :connect_base
+    attr_reader :keep_alive_timeout
     attr_reader :open_timeout
     attr_reader :proxy
     attr_reader :read_timeout
@@ -218,6 +220,11 @@ module Stripe
 
   def self.read_timeout=(read_timeout)
     @read_timeout = read_timeout
+    StripeClient.clear_all_connection_managers
+  end
+
+  def self.keep_alive_timeout=(keep_alive_timeout)
+    @keep_alive_timeout = keep_alive_timeout
     StripeClient.clear_all_connection_managers
   end
 

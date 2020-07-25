@@ -115,7 +115,8 @@ module Stripe
       #
       # Ruby's default of 2 seconds is almost certainly too short. Here I've
       # reused Go's default for `DefaultTransport`.
-      connection.keep_alive_timeout = 30
+      # connection.keep_alive_timeout = 30
+      connection.keep_alive_timeout = Stripe.keep_alive_timeout
 
       connection.open_timeout = Stripe.open_timeout
       connection.read_timeout = Stripe.read_timeout

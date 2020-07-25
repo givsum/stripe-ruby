@@ -37,16 +37,18 @@ module Stripe
       should "correctly initialize a connection" do
         old_proxy = Stripe.proxy
 
-        old_open_timeout = Stripe.open_timeout
-        old_read_timeout = Stripe.read_timeout
+        old_open_timeout        = Stripe.open_timeout
+        old_read_timeout        = Stripe.read_timeout
+        old_keep_alive_timeout  = Stripe.keep_alive_timeout
 
         begin
           # Make sure any global initialization here is undone in the `ensure`
           # block below.
           Stripe.proxy = "http://user:pass@localhost:8080"
 
-          Stripe.open_timeout = 123
-          Stripe.read_timeout = 456
+          Stripe.open_timeout       = 123
+          Stripe.read_timeout       = 456
+          Stripe.keep_alive_timeout = 789
 
           conn = @manager.connection_for("https://stripe.com")
 
@@ -63,6 +65,7 @@ module Stripe
           # Timeouts
           assert_equal 123, conn.open_timeout
           assert_equal 456, conn.read_timeout
+          assert_equal 789, conn.keep_alive_timeout
 
           assert_equal true, conn.use_ssl?
           assert_equal OpenSSL::SSL::VERIFY_PEER, conn.verify_mode
@@ -70,8 +73,9 @@ module Stripe
         ensure
           Stripe.proxy = old_proxy
 
-          Stripe.open_timeout = old_open_timeout
-          Stripe.read_timeout = old_read_timeout
+          Stripe.open_timeout       = old_open_timeout
+          Stripe.read_timeout       = old_read_timeout
+          Stripe.keep_alive_timeout = old_keep_alive_timeout
         end
       end
 
